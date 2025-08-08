@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stromfee.ai - AI-Powered Energy Analysis & Optimization</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #533483;
+            --purple-light: #e94560;
+            --gold: #ffd700;
+            --blue-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --purple-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --orange-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text: #ffffff;
+            --text-light: #b0b0b0;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: var(--primary);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .gradient-text {
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--blue-gradient);
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--purple-gradient);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            left: 0;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+        
+        .btn-outline:hover {
+            background: var(--blue-gradient);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .section-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--blue-gradient);
+            border-radius: 2px;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 60px;
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+        
+        header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: var(--text);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 1rem;
+            padding: 10px 15px;
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--blue-gradient);
+            transition: width 0.3s ease;
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            min-width: 200px;
+            box-shadow: var(--shadow);
+            z-index: 1;
+            border-radius: 10px;
+            padding: 15px 0;
+            top: 100%;
+            left: 0;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .dropdown-content a {
+            color: var(--text);
+            padding: 12px 20px;
+            display: block;
+            border-radius: 8px;
+            margin: 0 10px;
+            font-size: 0.9rem;
+        }
+        
+        .dropdown-content a:hover {
+            background: var(--blue-gradient);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+        
+        .hero {
+            background: var(--primary);
+            padding: 200px 0 120px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(245, 87, 108, 0.3) 0%, transparent 50%);
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 25px;
+            font-weight: 800;
+            line-height: 1.1;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.2s forwards;
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            color: var(--text-light);
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.4s forwards;
+        }
+        
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.8s forwards;
+        }
+        
+        .hero-stats-item {
+            text-align: center;
+            padding: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-stats-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .hero-stats-item h3 {
+            font-size: 3rem;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .hero-stats-item p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin: 0;
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .floating-elements::before,
+        .floating-elements::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-elements::before {
+            width: 300px;
+            height: 300px;
+            background: var(--blue-gradient);
+            opacity: 0.1;
+            top: 20%;
+            left: 10%;
+            animation-delay: -2s;
+        }
+        
+        .floating-elements::after {
+            width: 200px;
+            height: 200px;
+            background: var(--purple-gradient);
+            opacity: 0.1;
+            top: 60%;
+            right: 15%;
+            animation-delay: -4s;
+        }
+        
+        .about {
+            background: var(--secondary);
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-top: 60px;
+        }
+        
+        .about-text h2 {
+            font-size: 2.8rem;
+            margin-bottom: 25px;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .about-text p {
+            margin-bottom: 25px;
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        
+        .about-image {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--blue-gradient);
+            opacity: 0.2;
+            z-index: 2;
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.1);
+        }
+        
+        .beliefs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 80px;
+        }
+        
+        .belief-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .belief-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--blue-gradient);
+            transition: left 0.5s ease;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .belief-card:hover::before {
+            left: 0;
+        }
+        
+        .belief-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .belief-icon {
+            font-size: 3.5rem;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+        }
+        
+        .belief-card h3 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .features {
+            background: var(--primary);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-img {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .feature-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--blue-gradient);
+            opacity: 0.3;
+            z-index: 2;
+        }
+        
+        .feature-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .feature-card:hover .feature-img img {
+            transform: scale(1.2);
+        }
+        
+        .feature-content {
+            padding: 35px;
+        }
+        
+        .feature-content h3 {
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .feature-content p {
+            color: var(--text-light);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .video-section {
+            background: var(--secondary);
+            text-align: center;
+            padding: 120px 0;
+        }
+        
+        .video-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--blue-gradient);
+            opacity: 0.2;
+            z-index: 1;
+        }
+        
+        .video-container iframe {
+            width: 100%;
+            height: 560px;
+            border: none;
+        }
+        
+        .solutions {
+            background: var(--primary);
+        }
+        
+        .solution-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .solution-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 50px 35px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--blue-gradient);
+            transition: left 0.5s ease;
+            z-index: -1;
+            opacity: 0.9;
+        }
+        
+        .solution-card:hover::before {
+            left: 0;
+        }
+        
+        .solution-card:hover {
+            transform: translateY(-15px);
+            color: white;
+        }
+        
+        .solution-icon {
+            font-size: 4rem;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .solution-card:hover .solution-icon {
+            color: white;
+            -webkit-text-fill-color: white;
+        }
+        
+        .solution-card h3 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .testimonials {
+            background: var(--secondary);
+        }
+        
+        .testimonial-slider {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+        }
+        
+        .testimonial-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            font-size: 6rem;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            line-height: 1;
+            opacity: 0.3;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 20px;
+            border: 3px solid transparent;
+            background: var(--blue-gradient);
+        }
+        
+        .author-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+        
+        .author-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .blog {
+            background: var(--primary);
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 40px;
+        }
+        
+        .blog-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .blog-img {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .blog-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--blue-gradient);
+            opacity: 0.2;
+            z-index: 2;
+        }
+        
+        .blog-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .blog-card:hover .blog-img img {
+            transform: scale(1.1);
+        }
+        
+        .blog-content {
+            padding: 35px;
+        }
+        
+        .blog-date {
+            font-size: 0.9rem;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .blog-content h3 {
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            line-height: 1.3;
+        }
+        
+        .blog-content p {
+            color: var(--text-light);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .contact {
+            background: var(--secondary);
+        }
+        
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            transform: translateX(10px);
+        }
+        
+        .contact-icon {
+            font-size: 2rem;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .contact-details h3 {
+            margin-bottom: 8px;
+            font-size: 1.3rem;
+        }
+        
+        .contact-details p, .contact-details a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-details a:hover {
+            color: #667eea;
+        }
+        
+        .contact-form {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 50px;
+            border-radius: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 30px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 18px 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            font-size: 1rem;
+            color: var(--text);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        
+        .form-control::placeholder {
+            color: var(--text-light);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .chatbot {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        
+        .chatbot-toggle {
+            width: 70px;
+            height: 70px;
+            background: var(--blue-gradient);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+        
+        .chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            display: none;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+        }
+        
+        .chatbot-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-header h3 {
+            margin: 0;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .chatbot-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            padding: 12px 18px;
+            border-radius: 15px;
+            max-width: 80%;
+            animation: messageIn 0.3s ease;
+        }
+        
+        .message.bot {
+            background: var(--blue-gradient);
+            color: white;
+            align-self: flex-start;
+        }
+        
+        .message.user {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            align-self: flex-end;
+        }
+        
+        .chatbot-input {
+            padding: 20px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chatbot-input input {
+            flex: 1;
+            padding: 12px 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            color: var(--text);
+            outline: none;
+        }
+        
+        .chatbot-send {
+            padding: 12px 20px;
+            background: var(--blue-gradient);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-send:hover {
+            transform: scale(1.05);
+        }
+        
+        footer {
+            background: var(--primary);
+            padding: 80px 0 30px;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-col h3 {
+            color: var(--text);
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-col ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-col ul li a:hover {
+            color: #667eea;
+            padding-left: 5px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            color: var(--text);
+            transition: all 0.4s ease;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            background: var(--blue-gradient);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @media (max-width: 1024px) {
+            .section-title {
+                font-size: 2.8rem;
+            }
+            
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            
+            .about-content,
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .features-grid,
+            .blog-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 15px 20px;
+            }
+            
+            nav {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 85%;
+                height: calc(100vh - 80px);
+                background: var(--glass-bg);
+                backdrop-filter: blur(20px);
+                border-right: 1px solid var(--glass-border);
+                transition: all 0.4s ease;
+                z-index: 999;
+            }
+            
+            nav.active {
+                left: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                padding: 30px;
+            }
+            
+            nav ul li {
+                margin: 20px 0;
+            }
+            
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                display: none;
+                padding-left: 20px;
+                background: transparent;
+                border: none;
+            }
+            
+            .dropdown:hover .dropdown-content {
+                display: none;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero {
+                padding: 160px 0 80px;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .section {
+                padding: 80px 0;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .beliefs,
+            .solution-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-container iframe {
+                height: 400px;
+            }
+            
+            .testimonial-slider {
+                grid-template-columns: 1fr;
+            }
+            
+            .chatbot-window {
+                width: 300px;
+                height: 400px;
+            }
+            
+            .chatbot {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 0.9rem;
+            }
+            
+            .contact-form {
+                padding: 30px;
+            }
+            
+            .video-container iframe {
+                height: 250px;
+            }
+            
+            .chatbot-window {
+                width: 280px;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <div class="container header-container">
+            <a href="#" class="logo"><img style="filter: invert(1);" src="data:image/png+xml;base64,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" alt=""></a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="nav">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li class="dropdown">
+                        <a href="#about">About <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="#about">Our Story</a>
+                            <a href="#about">Our Mission</a>
+                            <a href="#about">Meet the Team</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#solutions">Products & Services <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="#solutions">Energy Forecasting</a>
+                            <a href="#solutions">PV System Monitoring</a>
+                            <a href="#solutions">Time Series Analysis</a>
+                            <a href="#solutions">Avatar & Interactive Video</a>
+                        </div>
+                    </li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#blog">Blog & News</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#" class="btn btn-accent">JOIN</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="floating-elements"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="gradient-text">Your Smart, Interactive Guide To Effortless Innovation</h1>
+                <p>Create seamless workflows with AI avatars and interactive guides that understand your energy needs</p>
+                <div class="hero-btns">
+                    <a href="#" class="btn pulse">Start Your AI Journey</a>
+                    <a href="#" class="btn btn-outline">Explore Solutions</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stats-item glass-card">
+                        <h3>1000+</h3>
+                        <p>Trusted Clients</p>
+                    </div>
+                    <div class="hero-stats-item glass-card">
+                        <h3>20+</h3>
+                        <p>Years Experience</p>
+                    </div>
+                    <div class="hero-stats-item glass-card">
+                        <h3>4.7/5</h3>
+                        <p>Customer Rating</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section about" id="about">
+        <div class="container">
+            <h2 class="section-title gradient-text">About Our Story</h2>
+            <p class="section-subtitle">Transforming Energy Intelligence With Local AI and Human Insight</p>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Built On Trust. Driven By Intelligence</h2>
+                    <p>Stromfee.AI turns energy data into clear, offline intelligence — no cloud needed. Our AI avatars help businesses cut waste, boost efficiency, and make smarter decisions.</p>
+                    <p>Our solutions combine smart forecasting, real-time detection, and AI insight to optimize energy, reduce waste, and help you act with confidence — without sending your data to the cloud.</p>
+                    <a href="#" class="btn">Learn More</a>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="AI Energy Analysis">
+                </div>
+            </div>
+            
+            <div class="beliefs">
+                <div class="belief-card glass-card">
+                    <div class="belief-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Privacy-First AI</h3>
+                    <p>Your data stays local. No cloud. No compromise. Complete privacy protection with enterprise-grade security.</p>
+                </div>
+                <div class="belief-card glass-card">
+                    <div class="belief-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Explainable AI</h3>
+                    <p>Our avatars turn complexity into clarity. Understand every decision with transparent AI reasoning.</p>
+                </div>
+                <div class="belief-card glass-card">
+                    <div class="belief-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3>Global & Local</h3>
+                    <p>Multilingual AI tailored to your region and industry. Global intelligence, local expertise.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section features" id="features">
+        <div class="container">
+            <h2 class="section-title gradient-text">About Smart AI</h2>
+            <p class="section-subtitle">Combining cutting-edge technologies for energy optimization</p>
+            
+            <div class="features-grid">
+                <div class="feature-card glass-card">
+                    <div class="feature-img">
+                        <img src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Time Series Forecasting">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Time Series Forecasting</h3>
+                        <p>Advanced machine learning algorithms predict energy consumption patterns with 95% accuracy. Make informed decisions about energy usage and optimize costs.</p>
+                        <a href="#" class="btn">Learn More</a>
+                    </div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-img">
+                        <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Weather-Aware Energy Planning">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Weather-Aware Energy Planning</h3>
+                        <p>Intelligent weather integration optimizes heating, cooling, and renewable energy systems. Reduce costs while maximizing efficiency and sustainability.</p>
+                        <a href="#" class="btn">Learn More</a>
+                    </div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-img">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Anomaly Detection">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Real-time Anomaly Detection</h3>
+                        <p>AI-powered monitoring detects unusual energy patterns instantly. Prevent equipment failures and identify optimization opportunities automatically.</p>
+                        <a href="#" class="btn">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section video-section">
+        <div class="container">
+            <h2 class="section-title gradient-text">Discover Stromfee.AI</h2>
+            <p class="section-subtitle">Watch our official introduction video to learn how we're transforming energy management</p>
+            
+            <div class="video-container glass-card">
+                <iframe width="1200" height="675" src="https://www.youtube.com/embed/ACCZBq3DJ20" title="Welcome to Stromfee AI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="section solutions" id="solutions">
+        <div class="container">
+            <h2 class="section-title gradient-text">AI-Powered Energy Solutions</h2>
+            <p class="section-subtitle">We deliver offline AI solutions that analyze energy use in real time. From waste detection to actionable insights, our tools drive efficiency with zero reliance on the cloud.</p>
+            
+            <div class="solution-cards">
+                <div class="solution-card glass-card">
+                    <div class="solution-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>No More Guessing</h3>
+                    <p>Most tools show history. We show what's next. Stromfee's AI forecasts demand and savings in real time — no cloud, no delay.</p>
+                </div>
+                <div class="solution-card glass-card">
+                    <div class="solution-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Insights That Talk Back</h3>
+                    <p>Don't dig through dashboards. Our avatars explain complex metrics with voice, visuals, and clarity — in your language.</p>
+                </div>
+                <div class="solution-card glass-card">
+                    <div class="solution-icon">
+                        <i class="fas fa-solar-panel"></i>
+                    </div>
+                    <h3>Make Solar Smarter</h3>
+                    <p>Optimize solar energy usage with AI that understands weather patterns, consumption habits, and storage needs.</p>
+                </div>
+                <div class="solution-card glass-card">
+                    <div class="solution-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>Connect Everything</h3>
+                    <p>Fragmented energy data is expensive. Our AI bridges devices, protocols, and sensors — locally — without cloud dependencies.</p>
+                </div>
+                <div class="solution-card glass-card">
+                    <div class="solution-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Predictive Analytics</h3>
+                    <p>Advanced forecasting models predict energy demand, equipment maintenance needs, and cost optimization opportunities.</p>
+                </div>
+                <div class="solution-card glass-card">
+                    <div class="solution-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Sustainability Focus</h3>
+                    <p>Reduce carbon footprint while maximizing efficiency. Our AI helps achieve sustainability goals and regulatory compliance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section projects" id="projects">
+        <div class="container">
+            <h2 class="section-title gradient-text">Finished Projects</h2>
+            <p class="section-subtitle">Revolutionizing Energy With AI Technologies</p>
+            
+            <div class="features-grid">
+                <div class="feature-card glass-card">
+                    <div class="feature-img">
+                        <img src="https://images.unsplash.com/photo-1486401899868-0e435ed85128?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Smart Building Project">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Smart Building Optimization</h3>
+                        <p>Implemented AI-driven HVAC optimization for a 50-story commercial complex, achieving 35% energy reduction and $2M annual savings.</p>
+                        <a href="#" class="btn">View Case Study</a>
+                    </div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-img">
+                        <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Industrial Energy Management">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Industrial Energy Management</h3>
+                        <p>Deployed predictive maintenance AI for manufacturing facilities, preventing equipment failures and optimizing production schedules.</p>
+                        <a href="#" class="btn">View Case Study</a>
+                    </div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-img">
+                        <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Solar Farm Integration">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Solar Farm Integration</h3>
+                        <p>Connected distributed solar installations with smart grid technology, maximizing renewable energy utilization across urban areas.</p>
+                        <a href="#" class="btn">View Case Study</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title gradient-text">What Our Clients Say</h2>
+            <p class="section-subtitle">Hear from businesses that transformed their energy management with Stromfee.AI</p>
+            
+            <div class="testimonial-slider">
+                <div class="testimonial-card glass-card">
+                    <p class="testimonial-text">"Stromfee.AI doesn't just provide AI—they provide smart AI. Their solutions are adaptive, reliable, and tailored perfectly to our niche. We've seen a 40% reduction in energy costs within the first quarter."</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="CEO">
+                        </div>
+                        <div class="author-info">
+                            <h4>Michael Johnson</h4>
+                            <p>CEO, TechCorp Industries</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card glass-card">
+                    <p class="testimonial-text">"The AI avatars make complex energy data so easy to understand. Our facility managers can now make informed decisions instantly. The ROI has been incredible."</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Operations Director">
+                        </div>
+                        <div class="author-info">
+                            <h4>Sarah Chen</h4>
+                            <p>Operations Director, Green Solutions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card glass-card">
+                    <p class="testimonial-text">"Privacy was our biggest concern, but Stromfee.AI's local processing approach gave us the confidence to implement their solution. Outstanding results with complete data control."</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="CTO">
+                        </div>
+                        <div class="author-info">
+                            <h4>David Rodriguez</h4>
+                            <p>CTO, SecureEnergy Corp</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section blog" id="blog">
+        <div class="container">
+            <h2 class="section-title gradient-text">Blog & Articles</h2>
+            <p class="section-subtitle">Powering A Sustainable Future With AI: Trends, Insights & Innovations</p>
+            
+            <div class="blog-grid">
+                <div class="blog-card glass-card">
+                    <div class="blog-img">
+                        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Future of Energy">
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-date">December 8, 2025</span>
+                        <h3>The Future of Energy Management: AI-Driven Optimization</h3>
+                        <p>Explore how artificial intelligence is revolutionizing energy management across industries, from predictive analytics to autonomous optimization systems.</p>
+                        <a href="#" class="btn">Read More</a>
+                    </div>
+                </div>
+                <div class="blog-card glass-card">
+                    <div class="blog-img">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Smart Grid Technology">
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-date">November 28, 2025</span>
+                        <h3>Smart Grid Integration: Connecting Renewable Sources</h3>
+                        <p>Learn how smart grid technology enables seamless integration of renewable energy sources, creating more resilient and efficient power systems.</p>
+                        <a href="#" class="btn">Read More</a>
+                    </div>
+                </div>
+                <div class="blog-card glass-card">
+                    <div class="blog-img">
+                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Data Privacy">
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-date">November 15, 2025</span>
+                        <h3>Privacy-First AI: The New Standard in Energy Analytics</h3>
+                        <p>Discover why local AI processing is becoming the gold standard for energy analytics, ensuring data privacy while maintaining superior performance.</p>
+                        <a href="#" class="btn">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section contact" id="contact">
+        <div class="container">
+            <h2 class="section-title gradient-text">Contact Us</h2>
+            <p class="section-subtitle">Explore Custom AI Solutions For Your Business. Speak with Our Team</p>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-item glass-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Email Us</h3>
+                            <a href="mailto:hello@stromfee.ai">hello@stromfee.ai</a>
+                        </div>
+                    </div>
+                    <div class="contact-item glass-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Call Us</h3>
+                            <a href="tel:+1-555-STROMFEE">+1 (555) STROMFEE</a>
+                        </div>
+                    </div>
+                    <div class="contact-item glass-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Address</h3>
+                            <p>Silicon Valley Tech Park<br>San Francisco, CA 94105</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form glass-card">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Enter Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" class="form-control" placeholder="Enter Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" class="form-control" placeholder="Enter Your Subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" class="form-control" placeholder="Tell us about your energy optimization needs..."></textarea>
+                        </div>
+                        <button type="submit" class="btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="chatbot">
+        <button class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-comments"></i>
+        </button>
+        <div class="chatbot-window glass-card" id="chatbotWindow">
+            <div class="chatbot-header">
+                <h3>AI Assistant</h3>
+                <button class="chatbot-close" id="chatbotClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot">
+                    Hello! I'm your AI energy assistant. How can I help you optimize your energy usage today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask me anything about energy optimization...">
+                <button class="chatbot-send" id="chatSend">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>STROMFEE.AI</h3>
+                    <p>Unlock Smarter Energy Savings with Privacy-First AI Solutions. Transform your energy management today!</p>
+                    <div class="social-links">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#solutions">Products & Services</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Energy Forecasting</a></li>
+                        <li><a href="#">PV System Monitoring</a></li>
+                        <li><a href="#">Time Series Analysis</a></li>
+                        <li><a href="#">Avatar & Interactive Video</a></li>
+                        <li><a href="#">Weather Forecasting</a></li>
+                        <li><a href="#">Anomaly Detection</a></li>
+                        <li><a href="#">Smart Grid Integration</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <ul>
+                        <li><a href="mailto:hello@stromfee.ai">hello@stromfee.ai</a></li>
+                        <li><a href="tel:+1-555-STROMFEE">+1 (555) STROMFEE</a></li>
+                        <li>Silicon Valley Tech Park<br>San Francisco, CA 94105</li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Stromfee.AI - Smarter Energy, Powered by Privacy-First AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const nav = document.getElementById('nav');
+        const dropdowns = document.querySelectorAll('.dropdown');
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const chatbotClose = document.getElementById('chatbotClose');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        const chatMessages = document.getElementById('chatbotMessages');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            mobileMenuBtn.innerHTML = nav.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        
+        dropdowns.forEach(dropdown => {
+            const link = dropdown.querySelector('a');
+            link.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    dropdown.classList.toggle('active');
+                }
+            });
+        });
+        
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(26, 26, 46, 0.95)';
+                header.style.backdropFilter = 'blur(20px)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.1)';
+                header.style.backdropFilter = 'blur(20px)';
+            }
+        });
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    if (nav.classList.contains('active')) {
+                        nav.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                }
+            });
+        });
+        
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    alert('Thank you for your message! Our AI energy experts will get back to you within 24 hours.');
+                    this.reset();
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            });
+        }
+        
+        chatbotToggle.addEventListener('click', () => {
+            chatbotWindow.style.display = chatbotWindow.style.display === 'flex' ? 'none' : 'flex';
+            chatbotToggle.innerHTML = chatbotWindow.style.display === 'flex' ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-comments"></i>';
+        });
+        
+        chatbotClose.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+            chatbotToggle.innerHTML = '<i class="fas fa-comments"></i>';
+        });
+        
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function getBotResponse(userMessage) {
+            const message = userMessage.toLowerCase();
+            if (message.includes('energy') || message.includes('power')) {
+                return "I can help you optimize your energy usage! Our AI solutions can reduce energy costs by up to 40%. Would you like to know more about our forecasting capabilities?";
+            } else if (message.includes('ai') || message.includes('artificial intelligence')) {
+                return "Our AI technology uses local processing to ensure your data privacy while providing real-time energy insights. No cloud dependency required!";
+            } else if (message.includes('cost') || message.includes('save') || message.includes('money')) {
+                return "Our clients typically see 25-40% reduction in energy costs within the first quarter. We offer predictive analytics and automated optimization systems.";
+            } else if (message.includes('solar') || message.includes('renewable')) {
+                return "We specialize in solar energy optimization! Our AI integrates weather data with consumption patterns to maximize your renewable energy ROI.";
+            } else if (message.includes('demo') || message.includes('trial')) {
+                return "I'd be happy to arrange a personalized demo! You can schedule one through our contact form or call us at +1 (555) STROMFEE.";
+            } else if (message.includes('privacy') || message.includes('security')) {
+                return "Data privacy is our top priority! All processing happens locally on your infrastructure - no data ever leaves your premises.";
+            } else {
+                return "Thank you for your question! Our AI energy solutions help businesses optimize consumption, reduce costs, and improve sustainability. How can I assist you specifically?";
+            }
+        }
+        
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatInput.value = '';
+                
+                setTimeout(() => {
+                    const response = getBotResponse(message);
+                    addMessage(response);
+                }, 1000);
+            }
+        }
+        
+        chatSend.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.section-title, .section-subtitle, .feature-card, .solution-card, .belief-card, .blog-card, .testimonial-card');
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.section-title, .section-subtitle, .feature-card, .solution-card, .belief-card, .blog-card, .testimonial-card');
+            animatedElements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                element.style.transition = 'all 0.8s ease';
+            });
+            animateOnScroll();
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('fade-in-card');
+            });
+        });
+    </script>
+</body>
+</html>
